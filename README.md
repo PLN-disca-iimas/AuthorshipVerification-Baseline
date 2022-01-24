@@ -6,3 +6,7 @@ El método basado en compresión de textos (compression method calculating cross
 
 
 
+## BOWSVM
+***
+
+En esta carpeta se encuentra el código necesario para correr un SVC con parámetros predeterminados para realizar una comparación con otros modelos para la tarea de verificación de autoría del PAN2021.

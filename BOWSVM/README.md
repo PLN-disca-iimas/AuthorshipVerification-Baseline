@@ -12,13 +12,12 @@ The data folder contains datasets for train and test in .jsonl format
   - Using pipenv
 
   > Make sure `pipenv` is installed. (If not, simply run: `pip install pipenv`.)
-  
-    ```sh
-    # Activate the virtual environment
-    pipenv shell
-    # Install the dependencies
-    pipenv install -r requirements.txt
-    ```
+  ```sh
+  # Activate the virtual environment
+  pipenv shell
+  # Install the dependencies
+  pipenv install -r requirements.txt
+  ```
 
 ## Run
 
