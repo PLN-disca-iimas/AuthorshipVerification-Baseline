@@ -1,3 +1,5 @@
+# Corpus
+Corpus [PAN20](https://drive.google.com/drive/folders/1mOQukE-We03k0-xMwICu0lGw7TAHLiVy?usp=sharing)
 # AuthorshipVerification-Baseline
 
 Este repositorio contiene las implementaciones de los baselines propuestos para la tarea de verificación de autoría del [PAN2021](https://pan.webis.de/clef21/pan21-web/author-identification.html).
