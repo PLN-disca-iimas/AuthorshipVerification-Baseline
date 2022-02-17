@@ -69,13 +69,18 @@ Supplementary files:
     PPM order=5, using data of data-small.txt
 """
 
-import argparse
-from time import time
-import numpy as np
-from math import log
+import re
+import os
 import json
+import time
+import argparse
+import platform
+import subprocess
+import numpy as np
+from pathlib import Path
+from math import log
 from joblib import dump, load
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, OrthogonalMatchingPursuitCV
 
 
 class Order(object):
@@ -326,10 +331,10 @@ def prepare_data(train, truth, prepared):
                 data.append(cross_entropy)
                 tr_labels.append(true_label)
 
-                print(i, prob_id, cross_entropy, labels[i]['same'], true_label)
+            #    print(i, prob_id, cross_entropy, labels[i]['same'], true_label)
 
-            else:
-                print(f"{labels[i]['id']} no es {prob_id} ")
+            #else:
+            #    print(f"{labels[i]['id']} no es {prob_id} ")
 
         # Data for training
         tr_data['data'] = data
@@ -364,8 +369,9 @@ def train_model(train_data, path_output_model):
 
 # ===== Predicciones ===== #
 
-def apply_model(path_test, path_answers, path_model, radius=0.05):
-    start_time = time()
+def apply_model(path_test,path_truth, path_model, radius=0.05):
+    
+    BASE_DIR = Path(__file__).resolve().parent
     model = load(path_model)
     print(model)
     answers = []
@@ -383,33 +389,50 @@ def apply_model(path_test, path_answers, path_model, radius=0.05):
 
             if 0.5 - radius <= proba_same <= 0.5 + radius:
                 proba_same = 0.5
+            if i%50==0:
+                print(f"{i+1} elementos analizados")
 
-            print(i + 1, prob_id, round(proba_same, 3), end='\r')
+    folder_name = re.findall(r'.*/([a-zA-Z0-9]+)/.*\.jsonl$',path_test)[0] 
+    prediction_folder = os.path.join(BASE_DIR,'prediction',f'{folder_name}_pred.jsonl')
 
-    with open(path_answers, 'w') as outfile:
+    with open(prediction_folder, 'w+') as f:
         for ans in answers:
-            json.dump(ans, outfile)
-            outfile.write('\n')
+            ans['value'] = int(ans['value'] > 0.5)
+            f.write(str(ans).replace("'",'"')+'\n')
+        print("Predictions saved in:", prediction_folder)
+    
+    time.sleep(4)
+    EVALUATION_DIR = os.path.join(BASE_DIR,"..","..","evaluation","TextCompression")    
+    evaluation_route = os.path.join(EVALUATION_DIR,folder_name)
+    if not os.path.exists(evaluation_route):
+        os.makedirs(evaluation_route)
 
-    print('elapsed time:', time() - start_time)
-
+    if "Windows" in platform.system():
+        subprocess.run(["python","../../utils/verif_evaluator.py","-i",
+            path_truth,"-a",prediction_folder,"-o", evaluation_route])
+    else:
+        subprocess.run(["python3","../../utils/verif_evaluator.py","-i",
+            path_truth,"-a",prediction_folder,"-o", evaluation_route])
 
 def main():
     parser = argparse.ArgumentParser(description='PAN21 Cross-domain Authorship Verification task: Baseline Compressor')
-    parser.add_argument('-i', type=str, help='Full path name to the evaluation dataset JSNOL file')
-    parser.add_argument('-o', type=str, help='Path to an output folder')
+    parser.add_argument('-i', type=str, help='Full path name to the evaluation dataset JSONL file')
+    parser.add_argument('-v', type=str, help='Full path name to the evaluation truth dataset JSONL file')
     parser.add_argument('-m', type=str, default='model_small.joblib', help='Full path name to the model file')
     parser.add_argument('-r', type=float, default=0.05, help='Radius around 0.5 to leave verification cases unanswered')
     args = parser.parse_args()
 
     if not args.i:
-        print('ERROR: The input file is required')
+        print('ERROR: The evaluation file is required')
         parser.exit(1)
-    if not args.o:
-        print('ERROR: The output folder is required')
+    if not args.v:
+        print('ERROR: The evaluation truth file is required')
         parser.exit(1)
-
-    apply_model(args.i, args.o, args.m, args.r)
+    if  ".jsonl" not in args.i:
+        raise ValueError('The evaluation file will be .jsonl')
+    if  ".jsonl" not in args.v:
+        raise ValueError('The evaluation truth file will be .jsonl')    
+    apply_model(args.i, args.v, args.m, args.r)
 
 
 if __name__ == '__main__':
