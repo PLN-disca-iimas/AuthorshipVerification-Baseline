@@ -3,7 +3,6 @@
 ## Run
 
 ***
-
 > __Below we assume the working directory is the repository root.__  
 
 To run the script, using the pan14 base data:
@@ -21,6 +20,7 @@ Output:
   Evaluation saved in:
   ~/AuthorshipVerification-Baseline/evaluationSupportVectorClassification/pan14/
   ```
+
 
 | Args   | Description                                    |
 |--------|------------------------------------------------|

@@ -40,7 +40,7 @@ def svcBinaryClassifier():
     if not args.o:
         raise ValueError('The output folder path is required')
     elif ".jsonl" not in args.o:
-        raise ValueError('The output formar will be .jsonl')
+        raise ValueError('The output format will be .jsonl')
 
     data = pd.DataFrame(getDataJSON(args.n)).set_index("id")
     data[['text1','text2']] = pd.DataFrame(data.pair.tolist(), index= data.index)
