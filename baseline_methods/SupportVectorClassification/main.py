@@ -5,9 +5,14 @@ import argparse
 import subprocess
 import pandas as pd
 from pathlib import Path
-from src.split import getDataJSON
 from sklearn.svm import SVC
 from sklearn.feature_extraction.text import CountVectorizer
+try:
+    from ...utils.split import getDataJSON
+except:
+    import sys
+    sys.path.insert(1,os.path.join(os.path.abspath('.'),"..",".."))
+    from utils.split import getDataJSON
 
 
 def svcBinaryClassifier():
@@ -63,25 +68,28 @@ def svcBinaryClassifier():
     X_test = unigram_vectorizer.transform(data_test["text1"]).toarray() -\
             unigram_vectorizer.transform(data_test["text2"]).toarray()
     y_pred = clf.predict(X_test)
+
     BASE_DIR = Path(__file__).resolve().parent
-    with open(os.path.join(BASE_DIR,"results",args.o),"w+") as f:
+    with open(os.path.join(BASE_DIR,"prediction",args.o),"w+") as f:
         for x,y in zip(data_test.index,y_pred):
             f.write(str({"id":x, "value":int(y)}).replace("'",'"')+"\n")
         print("Predictions saved in:")
-        print(os.path.join(BASE_DIR,"results",args.o))
+        print(os.path.join(BASE_DIR,"prediction",args.o))
     
-    evaluation_route = os.path.join(BASE_DIR,"metrics",re.findall(r'^([A-Za-z0-9]+).jsonl$',args.o)[0])
+    EVALUATION_DIR = os.path.join(BASE_DIR,"..","..","evaluation","SupportVectorClassification")    
+    evaluation_route = os.path.join(EVALUATION_DIR,re.findall(r'^([A-Za-z0-9]+).*\.jsonl$',args.o)[0])
     if not os.path.exists(evaluation_route):
         os.makedirs(evaluation_route)
     
     if "Windows" in platform.system():
-        subprocess.run(["python","./src/pan20_verif_evaluator.py","-i",
-            args.v,"-a",os.path.join(BASE_DIR,"results",args.o),"-o",
+        subprocess.run(["python","../../utils/verif_evaluator.py","-i",
+            args.v,"-a",os.path.join(BASE_DIR,"prediction",args.o),"-o",
             evaluation_route], capture_output=True)
     else:
-        subprocess.run(["python3","./src/pan20_verif_evaluator.py","-i",
-            args.v,"-a",os.path.join(BASE_DIR,"results",args.o),"-o",
+        subprocess.run(["python3","../../utils/verif_evaluator.py","-i",
+            args.v,"-a",os.path.join(BASE_DIR,"prediction",args.o),"-o",
             evaluation_route], capture_output=True)
+    
     print("Evaluation saved in:")
     print(evaluation_route)
 if __name__ == "__main__":
