@@ -1,0 +1,12 @@
+*.py[cod]
+**/__pycache__
+**/.vscode
+**/env
+Pipfile.lock
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
