@@ -75,6 +75,9 @@ from math import log
 from joblib import dump, load
 from sklearn.linear_model import LogisticRegression, OrthogonalMatchingPursuitCV
 
+import sys
+sys.path.insert(1,os.path.join(os.path.abspath('.'),"..",".."))
+from utils.split import getDataJSON
 
 class Order(object):
     # n - whicht order
@@ -301,11 +304,14 @@ def prepare_data(train, truth, prepared):
     :param prepared: Ruta donde se guardarán las entropias cruzadas
     :return:
     """
-    with open(truth, 'r') as fp:
-        labels = []  # List of dictionaries: {'id': , 'same':True/False}
-        for line in fp:
-            labels.append(json.loads(line))
+    
+    #with open(truth, 'r') as fp:
+    #    labels = []  # List of dictionaries: {'id': , 'same':True/False}
+    #    for line in fp:
+    #        labels.append(json.loads(line))
 
+    labels = getDataJSON(truth)
+        
     with open(train, 'r') as fp:
         tr_data = {}
         data = []
@@ -438,8 +444,11 @@ def main():
     if ".jsonl" not in args.v:
         raise ValueError('The evaluation truth file will be .jsonl')
 
+    print('Exec prepare_data')
     prepare_data(args.a, args.b, args.c)
+    print('Exec train_model')
     train_model(args.c, args.m)
+    print('Exec apply_model')
     apply_model(args.i, args.v, args.m, args.r)
 
 

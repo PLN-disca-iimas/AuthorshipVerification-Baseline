@@ -22,6 +22,9 @@ from pathlib import Path
 from tqdm import tqdm
 from sklearn.feature_extraction.text import HashingVectorizer
 
+# python .\main.py -input_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/train.jsonl" -input_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/train_truth.jsonl" -test_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/test.jsonl" -test_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/test_truth.jsonl" -output="out.jsonl"
+# python .\main.py -input_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/train.jsonl" -input_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/train_truth.jsonl" -test_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/test.jsonl" -test_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/test_truth.jsonl" -output="out.jsonl"
+
 try:
     from ...utils.split import getDataJSON
     from ...utils.verif_evaluator import evaluate_all
@@ -115,7 +118,7 @@ def main():
                         help='Proportion of features to keep in each iteration')
 
     args = parser.parse_args()
-    print(args)
+    print('args: ', args)
 
     np.random.seed(args.seed)
     random.seed(args.seed)

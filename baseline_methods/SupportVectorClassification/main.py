@@ -7,12 +7,17 @@ import pandas as pd
 from pathlib import Path
 from sklearn.svm import SVC
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+
 try:
     from ...utils.split import getDataJSON
 except:
     import sys
     sys.path.insert(1,os.path.join(os.path.abspath('.'),"..",".."))
     from utils.split import getDataJSON
+
 
 
 def svcBinaryClassifier():
@@ -42,6 +47,7 @@ def svcBinaryClassifier():
     elif ".jsonl" not in args.o:
         raise ValueError('The output format will be .jsonl')
 
+    print('Read and process train dataset')
     data = pd.DataFrame(getDataJSON(args.n)).set_index("id")
     data[['text1','text2']] = pd.DataFrame(data.pair.tolist(), index= data.index)
     del data["pair"]
@@ -49,14 +55,23 @@ def svcBinaryClassifier():
     data = pd.merge(data,data2,how='outer',left_index=True,right_index=True)
     del data2
 
+    #data = data.iloc[0:10]
+    print(data.info())
+
+    print('Train - CountVectorizer / fit_transform')
     unigram_vectorizer = CountVectorizer(ngram_range=(1, 1), token_pattern=r'\b\w+\b', min_df=1)
     X_2 = unigram_vectorizer.fit_transform(data["text1"])
-    X_2 = X_2.toarray() - unigram_vectorizer.transform(data["text2"]).toarray()
+    X_2 = X_2 - unigram_vectorizer.transform(data["text2"])
+    #print(len(X_2))
+
+    print(len(unigram_vectorizer.vocabulary_))
 
     #Entrenamiento SVC
+    print('Training model')
     clf = SVC(gamma='auto')
     clf.fit(X_2, data["value"])
 
+    print('Read and process test dataset')
     data_test = pd.DataFrame(getDataJSON(args.t)).set_index("id")
     data_test[['text1','text2']] = pd.DataFrame(data_test.pair.tolist(), index= data_test.index)
     del data_test["pair"]
@@ -64,9 +79,10 @@ def svcBinaryClassifier():
     data_test = pd.merge(data_test,data2,how='outer',left_index=True,right_index=True)
     del data2
 
+    print('Doing predictions... ')
+    print('Test - CountVectorizer / fit_transform')
     #Predicción
-    X_test = unigram_vectorizer.transform(data_test["text1"]).toarray() -\
-            unigram_vectorizer.transform(data_test["text2"]).toarray()
+    X_test = unigram_vectorizer.transform(data_test["text1"]) - unigram_vectorizer.transform(data_test["text2"])
     y_pred = clf.predict(X_test)
 
     BASE_DIR = Path(__file__).resolve().parent

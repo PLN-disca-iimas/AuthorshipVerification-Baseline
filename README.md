@@ -34,6 +34,11 @@ El método basado en compresión de textos (compression method calculating cross
 | PAN22  |SupportVectorClassification  | 15732      | 1070      | 0.696 | 0.575 | 0.575 | 0.575 | 0.594  | 0.603  |
 | PAN22  |TextCompression              | 15732      | 1070      | 0.667 | 0.474 | 0.564 | 0.5   | 0.556  | 0.552  |
 
+| PAN23  |CosineSimilarity             | 8024       | 440      | 0.67  | 0.484 | 0.745 | 0.503 | 0.552  | 0.591  |
+| PAN23  |SupportVectorClassification  | 8024       | 440      | 0.755 | 0.677 | 0.677 | 0.677 | 0.66   | 0.689  |
+| PAN23  |GradientBoostingClassifier   | 8024       | 440      | 0.772 | 0.732 | 0.732 | 0.732 | 0.708  | 0.735  |
+| PAN23  |TextCompression              | 8024       | 440      | 0.606 | 0.479 | 0.744 | 0.352 | 0.413  | 0.519  |
+
 ## Prerequisites
 ***
   - Using venv

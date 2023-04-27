@@ -274,7 +274,6 @@ def evaluate_all(true_y, pred_y):
 
     return results
 
-
 def main():
     parser = argparse.ArgumentParser(description='Evaluation script AA@PAN2020')
     parser.add_argument('-i', type=str,
