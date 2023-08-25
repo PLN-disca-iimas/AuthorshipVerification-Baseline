@@ -22,9 +22,6 @@ from pathlib import Path
 from tqdm import tqdm
 from sklearn.feature_extraction.text import HashingVectorizer
 
-# python .\main.py -input_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/train.jsonl" -input_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/train_truth.jsonl" -test_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/test.jsonl" -test_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan22/test_truth.jsonl" -output="out.jsonl"
-# python .\main.py -input_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/train.jsonl" -input_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/train_truth.jsonl" -test_pairs="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/test.jsonl" -test_truth="C:/Users/Qualtop/Desktop/andric/Projects/AuthorshipVerification-Baseline/corpus/pan23/test_truth.jsonl" -output="out.jsonl"
-
 try:
     from ...utils.split import getDataJSON
     from ...utils.verif_evaluator import evaluate_all
@@ -141,7 +138,7 @@ def main():
 
     texts = []
     i=0
-    for line in tqdm(open(args.input_pairs)):
+    for line in tqdm(open(args.input_pairs, encoding="utf8")):
         d = json.loads(line.strip())
         if d['id'] in gold:
             texts.extend(d['pair'])
@@ -177,7 +174,7 @@ def main():
 
     print('-> calculating pairwise similarities')
     similarities, labels = [], []
-    for line in tqdm(open(args.input_pairs)):
+    for line in tqdm(open(args.input_pairs, encoding="utf8")):
         d = json.loads(line.strip())
         if d['id'] in gold:
             x1, x2 = vectorizer.transform(d['pair']).toarray()
@@ -263,7 +260,7 @@ def main():
 
     print('-> calculating test similarities')
     with open('prediction' + os.sep + args.output, 'w') as outf:
-        for line in tqdm(open(args.test_pairs)):
+        for line in tqdm(open(args.test_pairs, encoding="utf8")):
             d = json.loads(line.strip())
             problem_id = d['id']
             x1, x2 = vectorizer.transform(d['pair']).toarray()

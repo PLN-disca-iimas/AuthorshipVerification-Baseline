@@ -1,24 +1,24 @@
 measure {
  key: "auc"
- value: "0.702"
+ value: "0.498"
 }
 measure {
  key: "c@1"
- value: "0.702"
+ value: "0.009"
 }
 measure {
  key: "f_05_u"
- value: "0.681"
+ value: "0.011"
 }
 measure {
  key: "F1"
- value: "0.76"
+ value: "0.4"
 }
 measure {
  key: "brier"
- value: "0.702"
+ value: "0.75"
 }
 measure {
  key: "overall"
- value: "0.709"
+ value: "0.334"
 }

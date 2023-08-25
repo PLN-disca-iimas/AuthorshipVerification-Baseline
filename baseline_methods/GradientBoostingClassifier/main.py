@@ -19,9 +19,6 @@ except:
     from utils.split import getDataJSON
 
 
-#python .\main.py -n="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan22/train.jsonl"   -y="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan22/train_truth.jsonl"  -t="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan22/test.jsonl" -v="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan22/test_truth.jsonl" -o="out.jsonl"
-#python .\main.py -n="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan23/train.jsonl"   -y="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan23/train_truth.jsonl"  -t="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan23/test.jsonl" -v="C:\Users\Qualtop\Desktop\andric\Projects\AuthorshipVerification-Baseline\corpus\pan23/test_truth.jsonl" -o="out.jsonl"
-
 def gradientBoostingClassifier():
     parser = argparse.ArgumentParser(description='SVC script AA@PAN')
     parser.add_argument('-t', type=str,

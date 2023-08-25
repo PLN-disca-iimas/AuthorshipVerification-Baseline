@@ -56,7 +56,7 @@ def svcBinaryClassifier():
     del data2
 
     #data = data.iloc[0:10]
-    print(data.info())
+    print(data.info()) 
 
     print('Train - CountVectorizer / fit_transform')
     unigram_vectorizer = CountVectorizer(ngram_range=(1, 1), token_pattern=r'\b\w+\b', min_df=1)

@@ -312,7 +312,7 @@ def prepare_data(train, truth, prepared):
 
     labels = getDataJSON(truth)
         
-    with open(train, 'r') as fp:
+    with open(train, 'rb') as fp:
         tr_data = {}
         data = []
         tr_labels = []

@@ -8,11 +8,11 @@ measure {
 }
 measure {
  key: "f_05_u"
- value: "0.619"
+ value: "0.621"
 }
 measure {
  key: "F1"
- value: "0.575"
+ value: "0.7"
 }
 measure {
  key: "brier"
@@ -20,5 +20,5 @@ measure {
 }
 measure {
  key: "overall"
- value: "0.61"
+ value: "0.636"
 }
